@@ -1,1 +1,6 @@
 pytest
+selenium
+pony
+pymysql
+jsonpickle
+mysql-connector-python
