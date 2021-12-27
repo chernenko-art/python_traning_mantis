@@ -1,5 +1,6 @@
 from model.project import Project
 from selenium.webdriver.common.by import By
+import re
 
 
 class ProjectHelper:
@@ -21,7 +22,8 @@ class ProjectHelper:
         web_project_list = self.app.driver.find_elements(By.CSS_SELECTOR, 'table[cellspacing="1"].width100 tr')[2:]
         for project in web_project_list:
             project_params = project.find_elements(By.TAG_NAME, "td")
-            id = project_params[0].find_element(By.TAG_NAME, "a").get_attribute("href")[-1:]
+            string_whith_id = project_params[0].find_element(By.TAG_NAME, "a").get_attribute("href")
+            id = re.search("id=(.*)", string_whith_id).group(1)
             name = project_params[0].text
             status = project_params[1].text
             view_state = project_params[3].text

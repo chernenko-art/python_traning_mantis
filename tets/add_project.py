@@ -1,9 +1,9 @@
 from model.project import Project
+from data.project import rand_test_data
 
 
 def test_add_project(app):
-    project = Project(name="Project999", status="stable", view_state="private",
-                      description="!!some description")
+    project = rand_test_data()
     if not app.project.add_project_page_is_view():
         app.project.open_add_project_page()
     old_list = app.project.get_project_list()
