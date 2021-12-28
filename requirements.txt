@@ -4,3 +4,4 @@ pony
 pymysql
 jsonpickle
 mysql-connector-python
+ftputil
