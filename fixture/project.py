@@ -19,7 +19,7 @@ class ProjectHelper:
     def get_project_list(self):
         self.open_project_page()
         project_list = []
-        web_project_list = self.app.driver.find_elements(By.CSS_SELECTOR, 'table[cellspacing="1"].width100 tr')[2:]
+        web_project_list = self.get_web_project_list()
         for project in web_project_list:
             project_params = project.find_elements(By.TAG_NAME, "td")
             string_whith_id = project_params[0].find_element(By.TAG_NAME, "a").get_attribute("href")
@@ -28,11 +28,20 @@ class ProjectHelper:
             status = project_params[1].text
             view_state = project_params[3].text
             description = project_params[4].text
-            project_list.append(Project(id=id, name=name, status=status, view_state=view_state, description=description))
+            project_list.append(
+                Project(id=id, name=name, status=status, view_state=view_state, description=description))
         return project_list
+
+    def get_web_project_list(self):
+        web_project_list = self.app.driver.find_elements(By.CSS_SELECTOR, 'table[cellspacing="1"].width100 tr')[2:]
+        return web_project_list
 
     def add_project_page_is_view(self):
         page_is_view = self.app.driver.find_elements(By.XPATH, "//input[@value='Add Project']")
+        return len(page_is_view) > 0
+
+    def project_page_is_view(self):
+        page_is_view = self.app.driver.find_elements(By.XPATH, "//input[@value='Add Category']")
         return len(page_is_view) > 0
 
     def add_new(self, project):
@@ -71,3 +80,20 @@ class ProjectHelper:
 
     def go_to_home_page(self):
         self.app.driver.find_element(By.CSS_SELECTOR, "body > div img").click()
+
+    def delete_by_index(self, index):
+        if not self.project_page_is_view():
+            self.open_project_page()
+        self.select_project_by_id(index)
+        self.delete_project()
+        self.go_to_home_page()
+
+    def select_project_by_id(self, index):
+        self.app.driver.find_element(
+            By.XPATH, f"//a[contains(@href, 'manage_proj_edit_page.php?project_id={index}')]"
+        ).click()
+
+    def delete_project(self):
+        self.app.driver.find_element(By.XPATH, "//input[@value='Delete Project']").click()
+        # confirm delete
+        self.app.driver.find_element(By.XPATH, "//input[@value='Delete Project']").click()
