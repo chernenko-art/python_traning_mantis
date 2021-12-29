@@ -6,7 +6,7 @@ import string
 # generate random string
 def random_string(prefix, maxlen):
     # generate string on letters, numbers symbols and spaces
-    symbol = string.ascii_letters + string.digits
+    symbol = string.ascii_letters
     # generate string on random symbols and length
     return prefix + "".join([random.choice(symbol) for i in range(random.randrange(maxlen))])
 
